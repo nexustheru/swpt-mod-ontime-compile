@@ -43,7 +43,7 @@ public class compiler : MonoBehaviour
         }
         public void Init()
         {
-            folderpath = "C://Users//Tess//Documents//UnityProjects//swptMod//RawScripts";
+            folderpath = "C://Users//Tess//Documents//UnityProjects//swpt-mod-ontime-compile//RawScripts";
             if (!Directory.Exists(folderpath))
             {
                 print("Creating mod folder");
