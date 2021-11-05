@@ -14,7 +14,7 @@ public class compiler : MonoBehaviour
 {
         public DirectoryInfo d;
         string folderpath = "";
-        private OnTimeCompiler.watcher wch = new OnTimeCompiler.watcher();
+        
         public Assembly compileScript(string source)
         {
             var provider = new CSharpCodeProvider();
@@ -56,11 +56,11 @@ public class compiler : MonoBehaviour
             print("compiling " + f.FullName);
             compile(f.FullName);
             }
-        print("compiled first set of files");
-
-        wch.setup(folderpath,this);
-        print("filewatcher setup");
-    }      
+            print("compiled first set of files");
+            OnTimeCompiler.watcher wch = gameObject.AddComponent(typeof(OnTimeCompiler.watcher)) as OnTimeCompiler.watcher;
+            wch.setup(folderpath,this);
+            print("filewatcher setup");
+        }      
 
         public void compile(string filename)
         {
@@ -84,5 +84,5 @@ public class compiler : MonoBehaviour
         {
         Init();
         }
-   
+
 }

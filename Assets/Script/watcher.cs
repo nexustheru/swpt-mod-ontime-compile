@@ -8,11 +8,12 @@ using UnityEngine;
 
 namespace OnTimeCompiler
 {
-    public class watcher  
+    public class watcher : MonoBehaviour
     {
-        bool active = false;
+        public bool active = false;
         compiler comp;
-        private FileSystemWatcher watchers=new FileSystemWatcher();
+        private string fname = "";
+        private FileSystemWatcher watchers = new FileSystemWatcher();
         public void setup(string filepath, compiler comps)
         {
             watchers.Path = filepath;
@@ -23,47 +24,48 @@ namespace OnTimeCompiler
             watchers.Changed += OnChanged;
             watchers.Created += OnCreated;
             watchers.Error += OnError;
+
         }
         private void OnChanged(object sender, FileSystemEventArgs e)
         {
             active = true;
-            comp.compile(e.FullPath);
-            Console.WriteLine("file changed, compiling");
+            fname = e.FullPath;
+
         }
 
         private void OnCreated(object sender, FileSystemEventArgs e)
         {
             active = true;
-            comp.compile(e.FullPath);
-            Console.WriteLine("file created, compiling");
+            fname = e.FullPath;
+
         }
 
         private void OnError(object sender, ErrorEventArgs e)
         {
             active = true;
-            PrintException(e.GetException());
+            Debug.Log(e.GetException());
+            active = false;
         }
 
         private static void PrintException(Exception ex)
         {
             if (ex != null)
             {
-                Console.WriteLine($"Message: {ex.Message}");
-                Console.WriteLine("Stacktrace:");
-                Console.WriteLine(ex.StackTrace);
-                Console.WriteLine();
+                Debug.Log($"Message: {ex.Message}");
+                Debug.Log("Stacktrace:");
+                Debug.Log(ex.StackTrace);
                 PrintException(ex.InnerException);
             }
         }
-
-        private void Update()
+        void Update()
         {
-              if (active)
-              {
+            if (active == true)
+            {
+                comp.compile(fname);
+                print("compiling..");
+                active = false;
+            }
 
-                 active = false;
-              }
         }
-        
     }
 }
